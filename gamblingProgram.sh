@@ -1,10 +1,11 @@
 #!/bin/bash -x
 
 read -p "Read Number of Days :" totalDays
-inital_stake=100
+initial_stake=100
 bet=1
 winValue=0
 looseValue=0
+two=2
 function calculatePercentage()
 {
 	value=$1
@@ -16,9 +17,9 @@ function betResult()
 	for(( counter=1; counter<=$totalDays; counter++ ))
 	do
 		read -p "Enter the Number of Game" totalGame
-		maxPercentage="$( calculatePercentage $((initial_stake)) )"
-		maxWinPercentage=$((maxPercentage+initial_stake))
-		maxLoosePercentage=$((maxPercentage+initial_stake))
+		percentage="$( calculatePercentage $initial_stake )"
+		maxWinPercentage=$(( $percentage+$initial_stake ))
+		maxLoosePercentage=$(( $percentage-$initial_stake ))
 		if [ $totalGame -gt 100 ]
 		then
 			echo "sorry you can not play more than 100 game"
@@ -33,16 +34,16 @@ function betResult()
 				if [ $betValue -eq 1 ]
 				then
 					((winValue++))
-					initial_stake=$((initial_stake+1))	
+					initial_stake=$((initial_stake+10))	
 					result="WIN"
 				else
 					((looseValue++))
-					initial_stake=$((initial_stake-1))
+					initial_stake=$((initial_stake-10))
 					result="LOOSE"
 				fi
-				if [ $initial_stake -gt $maxWinPercentage ] || [ $initial_Stake  -lt $maxLoosePercentage ]
+				if [ $initial_stake > $maxWinPercentage ] || [ $initial_Stake  < $maxLoosePercentage ]
 				then
-					break;
+					break
 				fi
 			done
 			initial_stake=$((initial_stake+100))
