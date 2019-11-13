@@ -2,6 +2,7 @@
 
 read -p "Read Number of Days :" totalDays
 initial_stake=100
+final_stake=100
 bet=1
 winValue=0
 looseValue=0
@@ -17,9 +18,9 @@ function betResult()
 	for(( counter=1; counter<=$totalDays; counter++ ))
 	do
 		read -p "Enter the Number of Game" totalGame
-		percentage="$( calculatePercentage $initial_stake )"
-		maxWinPercentage=$(( $percentage+$initial_stake ))
-		maxLoosePercentage=$(( $percentage-$initial_stake ))
+		percentage="$( calculatePercentage $final_stake )"
+		maxWinPercentage=$(( $percentage+$final_stake ))
+		maxLoosePercentage=$(( $percentage-$final_stake ))
 		if [ $totalGame -gt 100 ]
 		then
 			echo "sorry you can not play more than 100 game"
@@ -34,25 +35,27 @@ function betResult()
 				if [ $betValue -eq 1 ]
 				then
 					((winValue++))
-					initial_stake=$((initial_stake+10))	
+					final_stake=$(($final_stake+1))	
+					total_winAmount=$(( $final_stake-$initial_stake ))
 					result="WIN"
 				else
 					((looseValue++))
-					initial_stake=$((initial_stake-10))
+					final_stake=$(($final_stake-1))
+					total_looseAmount=$(( $final_stake-$initial_stake ))
 					result="LOOSE"
 				fi
-				if [ $initial_stake > $maxWinPercentage ] || [ $initial_Stake  < $maxLoosePercentage ]
+				if [ $final_stake > $maxWinPercentage ] || [ $final_Stake  < $maxLoosePercentage ]
 				then
 					break
 				fi
 			done
-			initial_stake=$((initial_stake+100))
+			final_stake=$((final_stake+100))
 		fi
 		if [ $counter -eq 20 ]
 		then
-			total_amount_after_20Days=$initial_stake
-			total_winValue_after_20Days=$winValue
-			total_looseValue_After_20Days=$looseValue
+			total_amount_after_20Days=$final_stake
+			total_winValue_after_20Days=$total_winAmount
+			total_looseValue_After_20Days=$total_looseAmount
 		fi
 	done
 }
